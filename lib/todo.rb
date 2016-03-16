@@ -1,7 +1,6 @@
 require 'csv'
 
 class Todo
-
   def initialize(file_name)
     @file_name = file_name #Don't touch this line or var
     # You will need to read from your CSV here and assign them to the @todos variable. make sure headers are set to true
@@ -34,16 +33,27 @@ class Todo
 
   def view_todos
     puts "Unfinished"
-    @todos.each_with_index do |todo, index|
-      puts "#{index + 1}) #{todo["name"]}"
+    unfinished = @todos.select {|rows| rows["completed"] == "no"}
+    unfinished.each_with_index do |unfinished, index|
+      puts "#{index + 1}) #{unfinished["name"]}"
     end
     puts "Completed"
+    finished = @todos.select {|rows| rows["completed"] == "yes"}
+    finished.each_with_index do |finished, index|
+      puts "#{index + 1}) #{finished["name"]}"
+    end
   end
 
   def add_todo
+    print "Name of Todo > "
+    input = get_input
+    @todos.push(["#{input}","no"])
   end
 
   def mark_todo
+    print "Which todo have you finished?"
+    row = get_input.to_i
+    @todos[row-1][1] = "yes"
   end
 
   def todos
